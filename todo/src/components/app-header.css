@@ -1,8 +1,8 @@
-.app-header{
+.app-header {
     align-items: flex-end;
 }
 
-.app-header h1{
+.app-header h1 {
     flex-grow: 1;
 }
 
