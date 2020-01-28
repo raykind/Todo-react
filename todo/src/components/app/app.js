@@ -26,7 +26,8 @@ export default class App extends React.Component {
             this.createTodoItem('Drink Coffee'),
             this.createTodoItem('Make Awesome App'),
             this.createTodoItem('Have a Lunch')
-        ]
+        ],
+        filteredStr: ''
     };
 
     deleteItem = (id) => {
@@ -88,13 +89,14 @@ export default class App extends React.Component {
     };
 
     onSearch = (str) => {
-
         const ids = [];
+
         this.state.todoData.forEach((item) => {
             if (item.label.toLowerCase().indexOf(str.toLowerCase()) !== -1){
                 ids.push(item.id);
             }
         });
+
         let newArray = [...this.state.todoData];
         newArray.forEach((item) => {
             if (ids.indexOf(item.id) !== -1){
@@ -103,12 +105,30 @@ export default class App extends React.Component {
                 item.shown = false;
             }
         });
-        this.setState(({todoData}) => {
-            return {
-                todoData: newArray
-            }
-        })
+
+        this.setState({
+            todoData: newArray,
+            filteredStr: str
+        });
     };
+
+    onFilterAction = (action) => {
+        this.onSearch(this.state.filteredStr);
+
+        const newData = this.state.todoData;
+        newData.forEach((item) => {
+            if (action === 'Active') {
+                if (item.shown && item.done) {
+                    item.shown = false;
+                }
+            } else if (action === 'Done') {
+                if (item.shown && !item.done) {
+                    item.shown = false;
+                }
+            }
+        });
+    };
+
 
     render() {
         const { todoData } = this.state;
@@ -121,7 +141,7 @@ export default class App extends React.Component {
                 <AppHeader toDo={todoCount} done={doneCount} />
                 <div className="top-panel d-flex">
                     <SearchPanel onSearch={this.onSearch}/>
-                    <ItemStatusFilter />
+                    <ItemStatusFilter onAction={this.onFilterAction}/>
                 </div>
 
                 <TodoList
