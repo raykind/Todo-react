@@ -1,3 +1,9 @@
-.add-button .btn{
+.add-button {
     margin-top: 10px;
+}
+.add-button .btn{
+    width: 30%;
+}
+.add-button input{
+    margin-right: 3px;
 }

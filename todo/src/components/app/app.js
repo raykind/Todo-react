@@ -16,7 +16,8 @@ export default class App extends React.Component {
             label,
             done: false,
             important: false,
-            id: this.maxId++
+            id: this.maxId++,
+            shown: true
         };
     };
 
@@ -86,6 +87,29 @@ export default class App extends React.Component {
         });
     };
 
+    onSearch = (str) => {
+
+        const ids = [];
+        this.state.todoData.forEach((item) => {
+            if (item.label.toLowerCase().indexOf(str.toLowerCase()) !== -1){
+                ids.push(item.id);
+            }
+        });
+        let newArray = [...this.state.todoData];
+        newArray.forEach((item) => {
+            if (ids.indexOf(item.id) !== -1){
+                item.shown = true;
+            } else {
+                item.shown = false;
+            }
+        });
+        this.setState(({todoData}) => {
+            return {
+                todoData: newArray
+            }
+        })
+    };
+
     render() {
         const { todoData } = this.state;
 
@@ -96,7 +120,7 @@ export default class App extends React.Component {
             <div className="todo-app">
                 <AppHeader toDo={todoCount} done={doneCount} />
                 <div className="top-panel d-flex">
-                    <SearchPanel />
+                    <SearchPanel onSearch={this.onSearch}/>
                     <ItemStatusFilter />
                 </div>
 
